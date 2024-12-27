@@ -2,27 +2,95 @@ namespace WinFormsApp1_241227
 {
     public partial class Form1 : Form
     {
-        int a;
+        buyer buyer1 = new buyer();
+        manager manager1 = new manager();
+        drinkmachine machine1 = new drinkmachine();
+
         public Form1()
         {
             InitializeComponent();
+            manager1.Can = 1000; // 관리자의 음료수 초기값 선언
+            manager1.Money = 0;
+            buyer1.Money = 10000; // 구매자가 처음 가진 돈 : 만원 , 초기값 선언
+            buyer1.Can = 0;
+            machine1.Can = 0;
+            machine1.Money = 0;
 
-            this.a = 0; // 쓰레기 값이 가득 들어있음, a=0 으로 초기화 가능
-
-            textBox1.Text = a.ToString(); // 아직 할당이 안된 a를 쓰고있다
-            // a에 값을 넣어주면 오류가 해결됨
-
-            DestroyTest destroyTest = new DestroyTest();
-
-            int local_number = destroyTest.Number; // get(가져오기)
-            destroyTest.Number = 100; // set(집어넣기)
         }
 
-        ~Form1()
+        private void button_NumCan_Click(object sender, EventArgs e) // 자판기의 음료 재고 확인 버튼
         {
-            MessageBox.Show("죽음");
-            // 창이 인스턴스가 해제될 때 소멸자가 수행됨
-            // 일반적으로 창을 닫을 때 수행됨
+            textBox_McinCan.Text = machine1.Can.ToString() + "개";
+        }
+
+        private void button_SetCan_Click(object sender, EventArgs e) // 음료 채워넣기 버튼 수행
+        {
+            if (manager1.Can <= 0)
+            {
+                manager1.Can += 1000;
+            }
+            else
+            {
+                machine1.Can += 100;
+                manager1.Can -= 100;
+                textBox_ManagerCan.Text = manager1.Can.ToString() + "개";
+                textBox_McinCan.Text = machine1.Can.ToString() + "개";
+            }
+
+        }
+
+        private void button_DrinkCan_Click(object sender, EventArgs e) // 음료 마시기
+        {
+            if (buyer1.Can > 0)
+            {
+                buyer1.Can -= 1;
+                textBox_BuyerCan.Text = buyer1.Can.ToString() + "개";
+            }
+            else
+            {
+                MessageBox.Show("마실 음료수 없음");
+            }
+        }
+
+        private void button_BuyCan_Click(object sender, EventArgs e) // 음료 구매하기
+        {
+            if (buyer1.Money < 500)
+            {
+                buyer1.Money += 10000; // 만원 추가
+            }
+            else
+            {
+                if (machine1.Can > 0) // 캔이 있을 때만 수행가능함
+                {
+                    buyer1.Money -= 500;
+                    machine1.Money += 500;
+                    machine1.Can -= 1;
+                    buyer1.Can += 1;
+                    textBox_BuyerCan.Text = buyer1.Can.ToString() + "개";
+                    textBox_McinCan.Text = machine1.Can.ToString() + "개";
+                    textBox_BuyerMoney.Text = buyer1.Money.ToString() + "원";
+                    textBox_McinMoney.Text = machine1.Money.ToString() + "원";
+                }
+                else
+                {
+                    MessageBox.Show("구매할 음료수 없음");
+                }
+            }
+        }
+
+        private void button_MoneyBack_Click(object sender, EventArgs e) // 돈 회수하기
+        {
+            if(machine1.Money >= 5000)
+            {
+                machine1.Money -= 5000;
+                manager1.Money += 5000;
+                textBox_McinMoney.Text = machine1.Money.ToString() + "원";
+                textBox_ManagerMoney.Text = manager1.Money.ToString() + "원";
+            }
+            else
+            {
+                MessageBox.Show("회수할 돈 부족함");
+            }
         }
     }
 }
