@@ -12,25 +12,15 @@ namespace WinFormsApp1_241227
         int can; // 자판기 내 음료 수량
         public int Can
         {
-            get
-            {
-                return can;
-            }
-            set
-            {
-                this.can = value;
-            }
+            get { return can; }
+            set { can = value; }
         }
+
         public int Money
         {
-            get
-            {
-                return money;
-            }
-            set
-            {
-                this.money = value;
-            }
+            get { return money; }
+            set { money = value; }
         }
     }
+
 }
